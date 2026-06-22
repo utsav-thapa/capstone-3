@@ -1,5 +1,6 @@
 package org.yearup.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +25,18 @@ public class CategoriesController
 
 
     // create an Autowired constructor to inject the categoryService and productService
+    @Autowired
+    public void setCategoryService (CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
+
+    @Autowired
+    public void setProductService (ProductService productService){
+        this.productService = productService;
+    }
 
     // add the appropriate annotation for a get action
+    @GetMapping("/")
     @PreAuthorize("hasRole('ADMIN')")
     public List<Category> getAll()
     {
