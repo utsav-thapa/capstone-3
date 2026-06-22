@@ -7,9 +7,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yearup.models.Category;
 import org.yearup.models.Product;
+import org.yearup.models.User;
 import org.yearup.service.CategoryService;
 import org.yearup.service.ProductService;
 
+import javax.management.relation.Role;
 import java.util.List;
 
 // add the annotations to make this a REST controller
@@ -67,14 +69,15 @@ public class CategoriesController
 
     // add annotation to call this method for a POST action
     // add annotation to ensure that only an ADMIN can call this function
-    @PostMapping()
     @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping()
     public ResponseEntity<Category> addCategory(@RequestBody Category category)
     {
         // insert the category and return it with status 201 Created
         Category category1 = categoryService.create(category);
         return ResponseEntity.status(HttpStatus.CREATED).body(category1);
     }
+
 
     // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
     // add annotation to ensure that only an ADMIN can call this function
