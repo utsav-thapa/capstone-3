@@ -27,7 +27,7 @@ public class CategoryService
     {
         // get category by id
         return categoryRepository.findById(categoryId)
-                .orElseThrow(()->new RuntimeException("Category with " + categoryId + " not found."));
+                .orElse(null);
     }
 
     public Category create(Category category)
