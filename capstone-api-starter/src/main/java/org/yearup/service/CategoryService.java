@@ -39,11 +39,17 @@ public class CategoryService
     public Category update(int categoryId, Category category)
     {
         // update category and return the updated category
-        return null;
+        Category existing = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        existing.setName(category.getName());
+        existing.setDescription(category.getDescription());
+        return categoryRepository.save(existing);
     }
 
-    public void delete(int categoryId)
-    {
+    public void delete(int categoryId) {
         // delete category
+        Category deletedCategory = categoryRepository.findById(categoryId)
+                .orElseThrow(()-> new RuntimeException("Category not found."));
+        categoryRepository.delete(deletedCategory);
     }
 }
