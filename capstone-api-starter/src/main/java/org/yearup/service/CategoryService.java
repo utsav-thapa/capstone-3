@@ -1,5 +1,6 @@
 package org.yearup.service;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.yearup.models.Category;
 import org.yearup.repository.CategoryRepository;
@@ -19,13 +20,14 @@ public class CategoryService
     public List<Category> getAllCategories()
     {
         // get all categories
-        return null;
+        return categoryRepository.findAll();
     }
 
     public Category getById(int categoryId)
     {
         // get category by id
-        return null;
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(()->new RuntimeException("Category with " + categoryId + " not found."));
     }
 
     public Category create(Category category)

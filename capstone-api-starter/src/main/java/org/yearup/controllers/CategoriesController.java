@@ -36,19 +36,20 @@ public class CategoriesController
     }
 
     // add the appropriate annotation for a get action
-    @GetMapping("/")
-    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping()
     public List<Category> getAll()
     {
         // find and return all categories
-        return null;
+        return categoryService.getAllCategories();
     }
 
     // add the appropriate annotation for a get action
+    @GetMapping("/{id}")
     public Category getById(@PathVariable int id)
     {
         // get the category by id
-        return null;
+        Category category = categoryService.getById(id);
+        return ResponseEntity.ok(category).getBody();
     }
 
     // the url to return all products in category 1 would look like this
