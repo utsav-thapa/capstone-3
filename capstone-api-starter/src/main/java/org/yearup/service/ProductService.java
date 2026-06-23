@@ -1,5 +1,6 @@
 package org.yearup.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.yearup.models.Product;
 import org.yearup.repository.ProductRepository;
@@ -46,9 +47,11 @@ public class ProductService
         return productRepository.save(product);
     }
 
+    @Transactional
     public Product update(int productId, Product product)
     {
-        Product existing = productRepository.findById(productId).orElseThrow();
+        Product existing = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found."));
         existing.setName(product.getName());
         existing.setPrice(product.getPrice());
         existing.setCategoryId(product.getCategoryId());
