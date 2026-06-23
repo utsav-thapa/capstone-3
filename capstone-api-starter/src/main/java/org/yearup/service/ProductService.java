@@ -33,6 +33,7 @@ public class ProductService
 
     public List<Product> listByCategoryId(int categoryId)
     {
+
         return productRepository.findByCategoryId(categoryId);
     }
 

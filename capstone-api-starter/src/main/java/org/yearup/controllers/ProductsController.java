@@ -1,5 +1,7 @@
 package org.yearup.controllers;
 
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,12 +13,13 @@ import org.yearup.service.ProductService;
 import java.util.List;
 
 @RestController
-@RequestMapping("products")
+@RequestMapping("/products")
 @CrossOrigin
 public class ProductsController
 {
-    private final ProductService productService;
+    private ProductService productService;
 
+    @Autowired
     public ProductsController(ProductService productService)
     {
         this.productService = productService;
@@ -52,12 +55,12 @@ public class ProductsController
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    @PutMapping("{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}")
     public Product updateProduct(@PathVariable int id, @RequestBody Product product)
     {
-        if (productService.getById(id) == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+//        if (productService.getById(id) == null)
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         return productService.update(id, product);
     }
