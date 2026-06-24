@@ -8,8 +8,7 @@ import org.yearup.repository.ProductRepository;
 import java.util.List;
 
 @Service
-public class ProductService
-{
+public class ProductService{
     private final ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository)
@@ -60,6 +59,7 @@ public class ProductService
         existing.setSubCategory(product.getSubCategory());
         existing.setFeatured(product.isFeatured());
         existing.setImageUrl(product.getImageUrl());
+        existing.setStock(product.getStock());
         return productRepository.save(existing);
     }
 
