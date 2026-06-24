@@ -81,7 +81,7 @@ public class ShoppingCartController
     // add a DELETE method to clear all products from the current users cart
     // https://localhost:8080/cart  - return the (now empty) cart so the front end can refresh it (200 OK)
     @DeleteMapping
-    public ResponseEntity<Void> clearCart(Principal principal){
+    public ResponseEntity<ShoppingCart> clearCart(Principal principal){
         // get the currently logged in username
         String userName = principal.getName();
 
@@ -90,7 +90,7 @@ public class ShoppingCartController
         int userId = user.getId();
         shoppingCartService.deleteCart(userId);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(shoppingCartService.getByUserId(userId));
     }
 
 }
