@@ -43,6 +43,9 @@ public class ShoppingCartController
         return shoppingCartService.getByUserId(userId);
     }
 
+    // add a POST method to add a product to the cart - the url should be
+    // https://localhost:8080/cart/products/15  (15 is the productId to be added)
+    // return the updated cart with status 201 Created
     @PostMapping("/products/{id}")
     public ResponseEntity<ShoppingCart> addProduct(Principal principal, @PathVariable int id){
 
@@ -56,10 +59,6 @@ public class ShoppingCartController
         return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.addProduct(id,userId));
     }
 
-    // add a POST method to add a product to the cart - the url should be
-    // https://localhost:8080/cart/products/15  (15 is the productId to be added)
-    // return the updated cart with status 201 Created
-
 
     // add a PUT method to update an existing product in the cart - the url should be
     // https://localhost:8080/cart/products/15  (15 is the productId to be updated)
@@ -68,5 +67,17 @@ public class ShoppingCartController
 
     // add a DELETE method to clear all products from the current users cart
     // https://localhost:8080/cart  - return the (now empty) cart so the front end can refresh it (200 OK)
+    @DeleteMapping
+    public ResponseEntity<Void> clearCart(Principal principal){
+        // get the currently logged in username
+        String userName = principal.getName();
+
+        // find database user by username
+        User user = userService.getByUserName(userName);
+        int userId = user.getId();
+        shoppingCartService.deleteCart(userId);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
 }

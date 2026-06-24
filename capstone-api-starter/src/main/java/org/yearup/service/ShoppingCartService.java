@@ -1,5 +1,6 @@
 package org.yearup.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.yearup.models.CartItem;
@@ -45,7 +46,7 @@ public class ShoppingCartService
         newItem.setUserId(userId);
         newItem.setProductId(productId);
 
-        CartItem existingItem = shoppingCartRepository.findByUserIdAndProductId(productId,userId);
+        CartItem existingItem = shoppingCartRepository.findByUserIdAndProductId(userId,productId);
 
         if (existingItem == null){
             shoppingCartRepository.save(newItem);
@@ -57,6 +58,11 @@ public class ShoppingCartService
             shoppingCartRepository.save(existingItem);
         }
         return getByUserId(userId);
+    }
+
+    @Transactional
+    public void deleteCart(int userId) {
+        shoppingCartRepository.deleteByUserId(userId);
     }
 
 
