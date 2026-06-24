@@ -52,4 +52,5 @@ public class ShoppingCartItem
 
         return subTotal - discountAmount;
     }
+
 }
