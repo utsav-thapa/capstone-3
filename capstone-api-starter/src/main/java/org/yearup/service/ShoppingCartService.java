@@ -41,16 +41,20 @@ public class ShoppingCartService
     }
 
     public ShoppingCart addProduct(int productId, int userId) {
+        CartItem newItem = new CartItem();
+        newItem.setUserId(userId);
+        newItem.setProductId(productId);
+
         CartItem existingItem = shoppingCartRepository.findByUserIdAndProductId(productId,userId);
-        if (existingItem != null){
-            existingItem.setQuantity(existingItem.getQuantity() + 1);
-            shoppingCartRepository.save(existingItem);
+
+        if (existingItem == null){
+            shoppingCartRepository.save(newItem);
 
         } else {
-            CartItem newItem = new CartItem();
-            newItem.setProductId(productId);
-            newItem.setUserId(userId);
-            shoppingCartRepository.save(newItem);
+//            newItem.setProductId(productId);
+//            newItem.setUserId(userId);
+            existingItem.setQuantity(existingItem.getQuantity() + 1);
+            shoppingCartRepository.save(existingItem);
         }
         return getByUserId(userId);
     }
