@@ -1,12 +1,10 @@
 package org.yearup.controllers;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.yearup.models.Profile;
 import org.yearup.models.User;
 import org.yearup.service.ProfileService;
@@ -37,8 +35,16 @@ public class ProfileController {
 
         Profile profile = profileService.findProfileByUserId(userId);
 
-        return ResponseEntity.ok(profile);
+        return ResponseEntity.status(HttpStatus.OK).body(profile);
     }
+
+//    @PostMapping
+//    public ResponseEntity<Profile> addProfile(@RequestBody Profile profile) {
+//        Profile profile1 = profileService.create(profile);
+//
+//        return ResponseEntity.status()
+
+//    }
 
 
 }
