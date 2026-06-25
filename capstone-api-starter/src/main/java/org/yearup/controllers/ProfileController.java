@@ -38,13 +38,17 @@ public class ProfileController {
         return ResponseEntity.status(HttpStatus.OK).body(profile);
     }
 
-//    @PostMapping
-//    public ResponseEntity<Profile> addProfile(@RequestBody Profile profile) {
-//        Profile profile1 = profileService.create(profile);
-//
-//        return ResponseEntity.status()
+    @PutMapping
+    public ResponseEntity<Profile> updateProfile (Principal principal, @RequestBody Profile profile) {
+        String userName = principal.getName();
 
-//    }
+        User user = userService.getByUserName(userName);
+        int userId = user.getId();
+        Profile profile1 = profileService.updateProfile(profile,userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(profile1);
+
+    }
 
 
 }

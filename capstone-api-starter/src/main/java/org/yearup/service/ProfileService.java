@@ -22,4 +22,19 @@ public class ProfileService
         return profileRepository.findById(userId)
                 .orElseThrow(()-> new RuntimeException("No profile found."));
     }
+
+    public Profile updateProfile(Profile profile, int userId){
+        Profile existing = profileRepository.findById(userId)
+                .orElseThrow(()-> new RuntimeException("No profile found"));
+        existing.setFirstName(profile.getFirstName());
+        existing.setLastName(profile.getLastName());
+        existing.setAddress(profile.getAddress());
+        existing.setCity(profile.getCity());
+        existing.setEmail(profile.getEmail());
+        existing.setPhone(profile.getPhone());
+        existing.setZip(profile.getZip());
+        existing.setState(profile.getState());
+
+        return profileRepository.save(existing);
+    }
 }
