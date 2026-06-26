@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.yearup.models.Product;
 import org.yearup.models.ShoppingCart;
 import org.yearup.models.ShoppingCartItem;
 import org.yearup.models.User;
@@ -18,11 +17,10 @@ import java.security.Principal;
 @RestController
 @PreAuthorize("hasRole('USER')")
 @RequestMapping("/cart")
-public class ShoppingCartController
-{
+public class ShoppingCartController {
     // a shopping cart controller depends on the service layer
-    private ShoppingCartService shoppingCartService;
-    private UserService userService;
+    private final ShoppingCartService shoppingCartService;
+    private final UserService userService;
 
     public ShoppingCartController(ShoppingCartService shoppingCartService, UserService userService) {
         this.shoppingCartService = shoppingCartService;
@@ -31,8 +29,7 @@ public class ShoppingCartController
 
     // each method in this controller requires a Principal object as a parameter
     @GetMapping
-    public ShoppingCart getCart(Principal principal)
-    {
+    public ShoppingCart getCart(Principal principal) {
         // get the currently logged in username
         String userName = principal.getName();
 
@@ -48,7 +45,7 @@ public class ShoppingCartController
     // https://localhost:8080/cart/products/15  (15 is the productId to be added)
     // return the updated cart with status 201 Created
     @PostMapping("/products/{id}")
-    public ResponseEntity<ShoppingCart> addProduct(Principal principal, @PathVariable int id){
+    public ResponseEntity<ShoppingCart> addProduct(Principal principal, @PathVariable int id) {
 
         // get the currently logged in username
         String userName = principal.getName();
@@ -57,11 +54,11 @@ public class ShoppingCartController
         User user = userService.getByUserName(userName);
         int userId = user.getId();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.addProduct(id,userId));
+        return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.addProduct(id, userId));
     }
 
     @PutMapping("/products/{id}")
-    public ResponseEntity<ShoppingCart> updateCart(Principal principal, @PathVariable int id, @RequestBody ShoppingCartItem item){
+    public ResponseEntity<ShoppingCart> updateCart(Principal principal, @PathVariable int id, @RequestBody ShoppingCartItem item) {
         // get the currently logged in username
         String userName = principal.getName();
 
@@ -69,7 +66,7 @@ public class ShoppingCartController
         User user = userService.getByUserName(userName);
         int userId = user.getId();
 
-        return ResponseEntity.status(HttpStatus.OK).body(shoppingCartService.updateCartItem(userId,id,item));
+        return ResponseEntity.status(HttpStatus.OK).body(shoppingCartService.updateCartItem(userId, id, item));
     }
 
 
@@ -81,7 +78,7 @@ public class ShoppingCartController
     // add a DELETE method to clear all products from the current users cart
     // https://localhost:8080/cart  - return the (now empty) cart so the front end can refresh it (200 OK)
     @DeleteMapping
-    public ResponseEntity<ShoppingCart> clearCart(Principal principal){
+    public ResponseEntity<ShoppingCart> clearCart(Principal principal) {
         // get the currently logged in username
         String userName = principal.getName();
 

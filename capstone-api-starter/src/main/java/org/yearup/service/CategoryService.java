@@ -1,6 +1,5 @@
 package org.yearup.service;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.yearup.models.Category;
 import org.yearup.repository.CategoryRepository;
@@ -8,39 +7,31 @@ import org.yearup.repository.CategoryRepository;
 import java.util.List;
 
 @Service
-public class CategoryService
-{
+public class CategoryService {
     private final CategoryRepository categoryRepository;
 
-    public CategoryService(CategoryRepository categoryRepository)
-    {
+    public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Category> getAllCategories()
-    {
+    public List<Category> getAllCategories() {
         // get all categories
         return categoryRepository.findAll();
     }
 
-    public Category getById(int categoryId)
-    {
+    public Category getById(int categoryId) {
         // get category by id
-        return categoryRepository.findById(categoryId)
-                .orElse(null);
+        return categoryRepository.findById(categoryId).orElse(null);
     }
 
-    public Category create(Category category)
-    {
+    public Category create(Category category) {
         // create a new category
         return categoryRepository.save(category);
     }
 
-    public Category update(int categoryId, Category category)
-    {
+    public Category update(int categoryId, Category category) {
         // update category and return the updated category
-        Category existing = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+        Category existing = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found"));
         existing.setName(category.getName());
         existing.setDescription(category.getDescription());
         return categoryRepository.save(existing);
@@ -48,8 +39,7 @@ public class CategoryService
 
     public void delete(int categoryId) {
         // delete category
-        Category deletedCategory = categoryRepository.findById(categoryId)
-                .orElseThrow(()-> new RuntimeException("Category not found."));
+        Category deletedCategory = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found."));
         categoryRepository.delete(deletedCategory);
     }
 }

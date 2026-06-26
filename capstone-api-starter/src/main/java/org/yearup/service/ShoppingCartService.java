@@ -1,7 +1,6 @@
 package org.yearup.service;
 
 import jakarta.transaction.Transactional;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.yearup.models.CartItem;
 import org.yearup.models.Product;
@@ -12,30 +11,26 @@ import org.yearup.repository.ShoppingCartRepository;
 import java.util.List;
 
 @Service
-public class ShoppingCartService
-{
+public class ShoppingCartService {
     // a shopping cart is built from cart rows plus a product lookup for each row
     private final ShoppingCartRepository shoppingCartRepository;
     private final ProductService productService;
 
-    public ShoppingCartService(ShoppingCartRepository shoppingCartRepository, ProductService productService)
-    {
+    public ShoppingCartService(ShoppingCartRepository shoppingCartRepository, ProductService productService) {
         this.shoppingCartRepository = shoppingCartRepository;
         this.productService = productService;
     }
 
-    public ShoppingCart getByUserId(int userId)
-    {
+    public ShoppingCart getByUserId(int userId) {
         ShoppingCart cart = new ShoppingCart();
         List<CartItem> cartItems = shoppingCartRepository.findByUserId(userId);
 
         // load the user's cart rows, look up each product, and build the ShoppingCart
-        for (CartItem cartItem : cartItems){
+        for (CartItem cartItem : cartItems) {
             Product product = productService.getById(cartItem.getProductId());
             ShoppingCartItem item = new ShoppingCartItem();
             item.setProduct(product);
             item.setQuantity(cartItem.getQuantity());
-//            cart.getItems().put(product.getProductId(),item);
             cart.add(item);
         }
         return cart;
@@ -46,14 +41,12 @@ public class ShoppingCartService
         newItem.setUserId(userId);
         newItem.setProductId(productId);
 
-        CartItem existingItem = shoppingCartRepository.findByUserIdAndProductId(userId,productId);
+        CartItem existingItem = shoppingCartRepository.findByUserIdAndProductId(userId, productId);
 
-        if (existingItem == null){
+        if (existingItem == null) {
             shoppingCartRepository.save(newItem);
 
         } else {
-//            newItem.setProductId(productId);
-//            newItem.setUserId(userId);
             existingItem.setQuantity(existingItem.getQuantity() + 1);
             shoppingCartRepository.save(existingItem);
         }
@@ -66,7 +59,7 @@ public class ShoppingCartService
     }
 
     public ShoppingCart updateCartItem(int userId, int id, ShoppingCartItem item) {
-        CartItem cartItem = shoppingCartRepository.findByUserIdAndProductId(userId,id);
+        CartItem cartItem = shoppingCartRepository.findByUserIdAndProductId(userId, id);
         cartItem.setQuantity(item.getQuantity());
         shoppingCartRepository.save(cartItem);
         return getByUserId(userId);
@@ -74,4 +67,5 @@ public class ShoppingCartService
 
 
     // add additional methods here
+    //  NO
 }
