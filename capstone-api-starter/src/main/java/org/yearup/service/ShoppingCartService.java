@@ -12,7 +12,6 @@ import java.util.List;
 
 @Service
 public class ShoppingCartService {
-    // a shopping cart is built from cart rows plus a product lookup for each row
     private final ShoppingCartRepository shoppingCartRepository;
     private final ProductService productService;
 
@@ -21,6 +20,7 @@ public class ShoppingCartService {
         this.productService = productService;
     }
 
+    // retrieves the full shopping cart for a given user
     public ShoppingCart getByUserId(int userId) {
         ShoppingCart cart = new ShoppingCart();
         List<CartItem> cartItems = shoppingCartRepository.findByUserId(userId);
@@ -36,6 +36,7 @@ public class ShoppingCartService {
         return cart;
     }
 
+    // adds a product to the user's cart or increments quantity if it already exists
     public ShoppingCart addProduct(int productId, int userId) {
         CartItem newItem = new CartItem();
         newItem.setUserId(userId);
@@ -53,11 +54,13 @@ public class ShoppingCartService {
         return getByUserId(userId);
     }
 
+    // deletes all items from a user's cart
     @Transactional
     public void deleteCart(int userId) {
         shoppingCartRepository.deleteByUserId(userId);
     }
 
+    // updates quantity of a specific product in the cart
     public ShoppingCart updateCartItem(int userId, int id, ShoppingCartItem item) {
         CartItem cartItem = shoppingCartRepository.findByUserIdAndProductId(userId, id);
         cartItem.setQuantity(item.getQuantity());
@@ -65,7 +68,4 @@ public class ShoppingCartService {
         return getByUserId(userId);
     }
 
-
-    // add additional methods here
-    //  NO
 }

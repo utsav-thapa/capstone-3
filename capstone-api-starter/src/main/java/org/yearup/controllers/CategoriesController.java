@@ -12,10 +12,12 @@ import org.yearup.service.ProductService;
 
 import java.util.List;
 
-// add the annotations to make this a REST controller
-// add the annotation to make this controller the endpoint for the following url
-// http://localhost:8080/categories
-// add annotation to allow cross site origin requests
+/**
+ * REST controller for managing product categories and category-related product queries.
+ * This controller exposes simple CRUD operations for categories and a convenience
+ * endpoint to list products by category. Authentication/authorization is handled
+ * by Spring Security annotations on admin-only endpoints.
+ */
 @RestController
 @RequestMapping("/categories")
 @CrossOrigin(origins = "*")
@@ -23,8 +25,6 @@ public class CategoriesController {
     private CategoryService categoryService;
     private ProductService productService;
 
-
-    // create an Autowired constructor to inject the categoryService and productService
     @Autowired
     public void setCategoryService(CategoryService categoryService) {
         this.categoryService = categoryService;
@@ -35,14 +35,14 @@ public class CategoriesController {
         this.productService = productService;
     }
 
-    // add the appropriate annotation for a get action
+    // return a list of categories and doesn't require authentication
     @GetMapping()
     public List<Category> getAll() {
-        // find and return all categories
+        // finds and returns all categories from the service layer
         return categoryService.getAllCategories();
     }
 
-    // add the appropriate annotation for a get action
+    // return the categories using the category id
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@PathVariable int id) {
         // get the category by id
@@ -54,16 +54,14 @@ public class CategoriesController {
         }
     }
 
-    // the url to return all products in category 1 would look like this
-    // https://localhost:8080/categories/1/products
+    //returns all products in a given category
     @GetMapping("{categoryId}/products")
     public List<Product> getProductsById(@PathVariable int categoryId) {
         // get a list of product by categoryId
         return productService.listByCategoryId(categoryId);
     }
 
-    // add annotation to call this method for a POST action
-    // add annotation to ensure that only an ADMIN can call this function
+    //creates new category but only admin can create it
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
     public ResponseEntity<Category> addCategory(@RequestBody Category category) {
@@ -73,8 +71,7 @@ public class CategoriesController {
     }
 
 
-    // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
-    // add annotation to ensure that only an ADMIN can call this function
+    // admin role can update category
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public Category updateCategory(@PathVariable int id, @RequestBody Category category) {
@@ -84,8 +81,7 @@ public class CategoriesController {
     }
 
 
-    // add annotation to call this method for a DELETE action - the url path must include the categoryId
-    // add annotation to ensure that only an ADMIN can call this function
+    // admin role can delete a category
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable int id) {

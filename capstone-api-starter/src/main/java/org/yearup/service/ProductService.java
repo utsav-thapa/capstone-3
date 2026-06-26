@@ -18,9 +18,7 @@ public class ProductService {
     public List<Product> search(Integer categoryId, Double minPrice, Double maxPrice, String subCategory) {
         List<Product> products = categoryId != null ? productRepository.findByCategoryId(categoryId) : productRepository.findAll();
 
-        return products.stream().filter(p -> minPrice == null || p.getPrice() >= minPrice).filter(p -> maxPrice == null || p.getPrice() <= maxPrice).filter(p -> subCategory == null || subCategory.equalsIgnoreCase(p.getSubCategory()))
-                //.filter(Product::isFeatured)
-                .toList();
+        return products.stream().filter(p -> minPrice == null || p.getPrice() >= minPrice).filter(p -> maxPrice == null || p.getPrice() <= maxPrice).filter(p -> subCategory == null || subCategory.equalsIgnoreCase(p.getSubCategory())).toList();
     }
 
     public List<Product> listByCategoryId(int categoryId) {
@@ -29,6 +27,7 @@ public class ProductService {
     }
 
     public Product getById(int productId) {
+
         return productRepository.findById(productId).orElse(null);
     }
 
@@ -37,9 +36,11 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    // updates an existing product in the database
     @Transactional
     public Product update(int productId, Product product) {
         Product existing = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found."));
+
         existing.setName(product.getName());
         existing.setPrice(product.getPrice());
         existing.setCategoryId(product.getCategoryId());
@@ -48,10 +49,12 @@ public class ProductService {
         existing.setFeatured(product.isFeatured());
         existing.setImageUrl(product.getImageUrl());
         existing.setStock(product.getStock());
+
         return productRepository.save(existing);
     }
 
     public void delete(int productId) {
+
         productRepository.deleteById(productId);
     }
 }

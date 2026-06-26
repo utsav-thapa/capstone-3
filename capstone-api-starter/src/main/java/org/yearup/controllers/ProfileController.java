@@ -25,6 +25,7 @@ public class ProfileController {
         this.userService = userService;
     }
 
+    // retrieves the profile of the currently logged-in user
     @GetMapping
     public ResponseEntity<Profile> getProfile(Principal principal) {
         String userName = principal.getName();
@@ -36,7 +37,7 @@ public class ProfileController {
 
         return ResponseEntity.status(HttpStatus.OK).body(profile);
     }
-
+    // updates the profile of the currently logged-in user
     @PutMapping
     public ResponseEntity<Profile> updateProfile(Principal principal, @RequestBody Profile profile) {
         String userName = principal.getName();

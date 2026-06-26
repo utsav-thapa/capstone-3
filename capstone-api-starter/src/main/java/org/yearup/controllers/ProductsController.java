@@ -22,12 +22,14 @@ public class ProductsController {
         this.productService = productService;
     }
 
+    // retrieves all products or filters them by category, price range, or subcategory
     @GetMapping
     @PreAuthorize("permitAll()")
     public List<Product> search(@RequestParam(name = "cat", required = false) Integer categoryId, @RequestParam(name = "minPrice", required = false) Double minPrice, @RequestParam(name = "maxPrice", required = false) Double maxPrice, @RequestParam(name = "subCategory", required = false) String subCategory) {
         return productService.search(categoryId, minPrice, maxPrice, subCategory);
     }
 
+    // retrieves a single product by its id
     @GetMapping("{id}")
     @PreAuthorize("permitAll()")
     public Product getById(@PathVariable int id) {
@@ -38,6 +40,7 @@ public class ProductsController {
         return product;
     }
 
+    // creates a new product (admin only)
     @PostMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Product> addProduct(@RequestBody Product product) {
@@ -45,14 +48,17 @@ public class ProductsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
+    // updates an existing product (admin only)
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public Product updateProduct(@PathVariable int id, @RequestBody Product product) {
+        // make sure the product exists before updating
         if (productService.getById(id) == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         return productService.update(id, product);
     }
 
+    // deletes a product by its id (admin only)
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteProduct(@PathVariable int id) {
